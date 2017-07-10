@@ -1,5 +1,8 @@
 const express = require('express');
 const hbs = require('hbs');
+const fs = require('fs');
+//object that holds env variables on machine
+const port = process.env.PORT || 3000;
 
 var app = express();
 
@@ -11,8 +14,9 @@ app.set('view engine', 'hbs');
 app.use((req, res, next) => {
 	//human readable timestamp
 	var now = new Date().toString();
+	var log = `${now}: ${req.method} ${req.url}`;
 
-	console.log(`${now}`);
+	fs.appendFile('server.log', log + '\n');
 	next();
 });
 
@@ -43,6 +47,4 @@ app.get('/about', (req,res) => {
 	});
 });
 
-
-
-app.listen(3000);
+app.listen(port);
